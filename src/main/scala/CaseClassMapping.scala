@@ -5,7 +5,7 @@ object CaseClassMapping extends App {
   // the base query for the Users table
   val users = TableQuery[Users]
 
-  val db = Database.forURL("jdbc:h2:mem:hello", driver = "org.h2.Driver")
+  val db = Database.forURL("jdbc:h2:mem:formula1;DATABASE_TO_UPPER=false", driver = "org.h2.Driver")
   db.withSession { implicit session =>
     
     // create the schema

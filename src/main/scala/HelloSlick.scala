@@ -10,7 +10,7 @@ object HelloSlick extends App {
   val drivers: TableQuery[Driver] = TableQuery[Driver]
   
   // Create a connection (called a "session") to an in-memory H2 database
-  val db = Database.forURL("jdbc:h2:mem:hello", driver = "org.h2.Driver")
+  val db = Database.forURL("jdbc:h2:mem:formula1;DATABASE_TO_UPPER=false", driver = "org.h2.Driver")
   db.withSession { implicit session =>
 
     // Create the schema by combining the DDLs for the teams and drivers
