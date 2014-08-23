@@ -1,17 +1,8 @@
 import org.scalatest._
 import scala.slick.driver.H2Driver.simple._
-import scala.slick.jdbc.meta._
 
 
-class Formula1Suite extends FunSuite with BeforeAndAfter {
-
-  //get complete f1 table (regex it)
-  //filter based on weight
-  //filter
-  //crud
-  //define result
-  //sum result
-
+class T2_Filters extends FunSuite with BeforeAndAfter {
   implicit var session: Session = null
   val teams = TableQuery[Teams]
   val drivers = TableQuery[Drivers]
