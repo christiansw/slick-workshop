@@ -4,10 +4,10 @@ import scala.slick.driver.H2Driver.simple._
 object HelloSlick extends App {
 
   // The query interface for the Suppliers table
-  val suppliers: TableQuery[Suppliers] = TableQuery[Suppliers]
+  val teams: TableQuery[Team] = TableQuery[Team]
 
   // the query interface for the Coffees table
-  val coffees: TableQuery[Coffees] = TableQuery[Coffees]
+  val drivers: TableQuery[Driver] = TableQuery[Driver]
   
   // Create a connection (called a "session") to an in-memory H2 database
   val db = Database.forURL("jdbc:h2:mem:hello", driver = "org.h2.Driver")
@@ -15,50 +15,50 @@ object HelloSlick extends App {
 
     // Create the schema by combining the DDLs for the Suppliers and Coffees
     // tables using the query interfaces
-    (suppliers.ddl ++ coffees.ddl).create
+    (teams.ddl ++ drivers.ddl).create
 
   
     /* Create / Insert */
   
-    // Insert some suppliers
-    suppliers += (101, "Acme, Inc.", "99 Market Street", "Groundsville", "CA", "95199")
-    suppliers += ( 49, "Superior Coffee", "1 Party Place", "Mendocino", "CA", "95460")
-    suppliers += (150, "The High Ground", "100 Coffee Lane", "Meadows", "CA", "93966")
+    // Insert some teams
+    teams += (1, "Red Bull", "Renault", 425, 710)
+    teams += (2, "Mercedes", "Mercedes", 300, 610)
+    teams += (3, "Ferrari", "Ferrari", 410, 700)
+    teams += (4, "McLaren", "Mercedes", 160, 500)
 
     // Insert some coffees (using JDBC's batch insert feature)
-    val coffeesInsertResult: Option[Int] = coffees ++= Seq (
-      ("Colombian",         101, 7.99, 0, 0),
-      ("French_Roast",       49, 8.99, 0, 0),
-      ("Espresso",          150, 9.99, 0, 0),
-      ("Colombian_Decaf",   101, 8.99, 0, 0),
-      ("French_Roast_Decaf", 49, 9.99, 0, 0)
+    val driversInsertResult: Option[Int] = drivers ++= Seq (
+      ("Nico Rosberg", 2, 1985, 71),
+      ("Sebastian Vettel", 1, 1987, 58),
+      ("Fernando Alonso", 3, 1981, 68),
+      ("Jenson Button",   4, 1980, 72)
     )
   
-    val allSuppliers: List[(Int, String, String, String, String, String)] =
-      suppliers.list
+    val allTeams: List[(Int, String, String, Int, Int)] =
+      teams.list
 
     // Print the number of rows inserted
-    coffeesInsertResult foreach { numRows =>
-      println(s"Inserted $numRows rows into the Coffees table")
+    driversInsertResult foreach { numRows =>
+      println(s"Inserted $numRows rows into the drivers table")
     }
 
   
     /* Read / Query / Select */
   
-    // Print the SQL for the Coffees query
-    println("Generated SQL for base Coffees query:\n" + coffees.selectStatement)
+    // Print the SQL for the drivers query
+    println("Generated SQL for base drivers query:\n" + drivers.selectStatement)
 
-    // Query the Coffees table using a foreach and print each row
-    coffees foreach { case (name, supID, price, sales, total) =>
-      println("  " + name + "\t" + supID + "\t" + price + "\t" + sales + "\t" + total)
+    // Query the drivers table using a foreach and print each row
+    drivers foreach { case (name, teamId, birthYear, weight) =>
+      println("  " + name + "\t" + teamId + "\t" + birthYear + "\t" + weight)
     }
 
 
     /* Filtering / Where */
 
-    // Construct a query where the price of Coffees is > 9.0
-    val filterQuery: Query[Coffees, (String, Int, Double, Int, Int), Seq] =
-      coffees.filter(_.price > 9.0)
+    // Construct a query where the weight of Coffees is > 70
+    val filterQuery: Query[Driver, (String, Int, Int, Int), Seq] =
+      drivers.filter(_.weight > 70)
 
     println("Generated SQL for filter query:\n" + filterQuery.selectStatement)
 
@@ -69,10 +69,10 @@ object HelloSlick extends App {
     /* Update */
   
     // Construct an update query with the sales column being the one to update
-    val updateQuery: Query[Column[Int], Int, Seq] = coffees.map(_.sales)
+    val updateQuery: Query[Column[Int], Int, Seq] = drivers.map(_.weight)
 
     // Print the SQL for the Coffees update query
-    println("Generated SQL for Coffees update:\n" + updateQuery.updateStatement)
+    println("Generated SQL for drivers update:\n" + updateQuery.updateStatement)
   
     // Perform the update
     val numUpdatedRows = updateQuery.update(1)
@@ -82,12 +82,12 @@ object HelloSlick extends App {
 
     /* Delete */
 
-    // Construct a delete query that deletes coffees with a price less than 8.0
-    val deleteQuery: Query[Coffees,(String, Int, Double, Int, Int), Seq] =
-      coffees.filter(_.price < 8.0)
+    // Construct a delete query that deletes drivers with a weight less than 70
+    val deleteQuery: Query[Driver,(String, Int, Int, Int), Seq] =
+      drivers.filter(_.weight < 70)
 
     // Print the SQL for the Coffees delete query
-    println("Generated SQL for Coffees delete:\n" + deleteQuery.deleteStatement)
+    println("Generated SQL for drivers delete:\n" + deleteQuery.deleteStatement)
 
     // Perform the delete
     val numDeletedRows = deleteQuery.delete
@@ -97,8 +97,8 @@ object HelloSlick extends App {
   
     /* Selecting Specific Columns */
   
-    // Construct a new coffees query that just selects the name
-    val justNameQuery: Query[Column[String], String, Seq] = coffees.map(_.name)
+    // Construct a new drivers query that just selects the name
+    val justNameQuery: Query[Column[String], String, Seq] = drivers.map(_.name)
   
     println("Generated SQL for query returning just the name:\n" +
       justNameQuery.selectStatement)
@@ -109,10 +109,10 @@ object HelloSlick extends App {
   
     /* Sorting / Order By */
   
-    val sortByPriceQuery: Query[Coffees, (String, Int, Double, Int, Int), Seq] =
-      coffees.sortBy(_.price)
+    val sortByPriceQuery: Query[Driver, (String, Int, Int, Int), Seq] =
+      drivers.sortBy(_.birthYear)
   
-    println("Generated SQL for query sorted by price:\n" +
+    println("Generated SQL for query sorted by birth year:\n" +
       sortByPriceQuery.selectStatement)
   
     // Execute the query
@@ -122,7 +122,7 @@ object HelloSlick extends App {
     /* Query Composition */
   
     val composedQuery: Query[Column[String], String, Seq] =
-      coffees.sortBy(_.name).take(3).filter(_.price > 9.0).map(_.name)
+      drivers.sortBy(_.name).take(3).filter(_.birthYear < 1982).map(_.name)
   
     println("Generated SQL for composed query:\n" +
       composedQuery.selectStatement)
@@ -133,10 +133,10 @@ object HelloSlick extends App {
   
     /* Joins */
   
-    // Join the tables using the relationship defined in the Coffees table
+    // Join the tables using the relationship defined in the drivers table
     val joinQuery: Query[(Column[String], Column[String]), (String, String), Seq] = for {
-      c <- coffees if c.price > 9.0
-      s <- c.supplier
+      c <- drivers if c.birthYear < 1982
+      s <- c.team
     } yield (c.name, s.name)
 
     println("Generated SQL for the join query:\n" + joinQuery.selectStatement)
@@ -147,13 +147,13 @@ object HelloSlick extends App {
     
     /* Computed Values */
     
-    // Create a new computed column that calculates the max price
-    val maxPriceColumn: Column[Option[Double]] = coffees.map(_.price).max
+    // Create a new computed column that calculates the max weight
+    val maxWeightColumn: Column[Option[Int]] = drivers.map(_.weight).max
     
-    println("Generated SQL for max price column:\n" + maxPriceColumn.selectStatement)
+    println("Generated SQL for max weight column:\n" + maxWeightColumn.selectStatement)
     
     // Execute the computed value query
-    println(maxPriceColumn.run)
+    println(maxWeightColumn.run)
     
     
     /* Manual SQL / String Interpolation */
@@ -162,10 +162,10 @@ object HelloSlick extends App {
     import scala.slick.jdbc.StaticQuery.interpolation
   
     // A value to insert into the statement
-    val state = "CA"
+    val engineBrand = "Mercedes"
   
     // Construct a SQL statement manually with an interpolated value
-    val plainQuery = sql"select SUP_NAME from SUPPLIERS where STATE = $state".as[String]
+    val plainQuery = sql"select name from teams where engine_brand = $engineBrand".as[String]
     
     println("Generated SQL for plain query:\n" + plainQuery.getStatement)
     
