@@ -5,8 +5,8 @@ case class Team(id: Option[Int] = None, name: String, engineBrand: String, budge
 
 class Teams(tag: Tag) extends Table[Team](tag, "teams") {
   def id: Column[Int] = column[Int]("team_id", O.PrimaryKey)
-  def name: Column[String] = column[String]("name")
-  def engineBrand: Column[String] = column[String]("engine_brand")
+  def name: Column[String] = column[String]("name", O.NotNull)
+  def engineBrand: Column[String] = column[String]("engine_brand", O.NotNull)
   def budget: Column[Int] = column[Int]("budget")
   def employees: Column[Int] = column[Int]("employees")
 

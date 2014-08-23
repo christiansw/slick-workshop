@@ -6,7 +6,7 @@ case class Driver(name: String, teamId: Int, birthYear: Int, weight: Int)
 class Drivers(tag: Tag) extends Table[Driver](tag, "drivers") {
   def name: Column[String] = column[String]("name", O.PrimaryKey)
   def teamId: Column[Int] = column[Int]("team_id")
-  def birthYear: Column[Int] = column[Int]("birth_year")
+  def birthYear: Column[Int] = column[Int]("birth_year", O.NotNull)
   def weight: Column[Int] = column[Int]("weight")
 
   // the * projection (e.g. select * ...) auto-transforms the tupled column values to / from a Driver
