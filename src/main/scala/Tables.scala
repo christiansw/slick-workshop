@@ -1,7 +1,7 @@
 import scala.slick.driver.H2Driver.simple._
 import scala.slick.lifted.{ProvenShape, ForeignKeyQuery}
 
-case class Team(tag: Tag)
+class Team(tag: Tag)
   extends Table[(Int, String, String, Int, Int)](tag, "teams") {
 
   // This is the primary key column:
@@ -17,7 +17,7 @@ case class Team(tag: Tag)
 }
 
 // A drivers table with 5 columns: name, team id, price, sales, total
-case class Driver(tag: Tag)
+class Driver(tag: Tag)
   extends Table[(String, Int, Int, Int)](tag, "drivers") {
 
   def name: Column[String] = column[String]("name", O.PrimaryKey)
