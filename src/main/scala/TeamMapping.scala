@@ -9,6 +9,7 @@ class Teams(tag: Tag) extends Table[Team](tag, "teams") {
   def engineBrand: Column[String] = column[String]("engine_brand")
   def budget: Column[Int] = column[Int]("budget")
   def employees: Column[Int] = column[Int]("employees")
-  
+
+  // the * projection (e.g. select * ...) auto-transforms the tupled column values to / from a Team
   def * = (id.?, name, engineBrand, budget, employees) <> (Team.tupled, Team.unapply)
 }

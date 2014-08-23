@@ -9,6 +9,7 @@ class Drivers(tag: Tag) extends Table[Driver](tag, "drivers") {
   def birthYear: Column[Int] = column[Int]("birth_year")
   def weight: Column[Int] = column[Int]("weight")
 
+  // the * projection (e.g. select * ...) auto-transforms the tupled column values to / from a Driver
   def * = (name, teamId, birthYear, weight) <>(Driver.tupled, Driver.unapply)
 
   // A reified foreign key relation that can be navigated to create a join
