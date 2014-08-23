@@ -4,17 +4,20 @@ import scala.slick.driver.H2Driver.simple._
 class T1_InsertAndQuery extends BaseFormula1Suite {
   val teams = TableQuery[Teams]
   val drivers = TableQuery[Drivers]
+  val sut = new Formula1Repository()
 
   override def beforeEach {
     super.beforeEach()
-    createSchema()
+
+    //create schema
+    (teams.ddl ++ drivers.ddl).create
   }
 
   test("Should return inserted team") {
     val redBull: Team = Team(Some(1), "Red Bull", "Renault", 425, 710)
     teams += redBull
 
-    val results = teams.list
+    val results = sut.listTeams(session)
 
     assert(results.size == 1)
     assert(results.head == redBull)
@@ -25,12 +28,10 @@ class T1_InsertAndQuery extends BaseFormula1Suite {
     val nico: Driver = Driver("Nico Rosberg", 2, 1985, 71)
     drivers += nico
 
-    val results = drivers.list
+    val results = sut.listDrivers(session)
 
     assert(results.size == 1)
     assert(results.head == nico)
   }
-
-  def createSchema() = (teams.ddl ++ drivers.ddl).create
 
 }
