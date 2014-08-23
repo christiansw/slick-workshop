@@ -4,10 +4,10 @@ import scala.slick.driver.H2Driver.simple._
 object HelloSlick extends App {
 
   // The query interface for the teams table
-  val teams: TableQuery[Team] = TableQuery[Team]
+  val teams: TableQuery[Teams] = TableQuery[Teams]
 
   // the query interface for the drivers table
-  val drivers: TableQuery[Driver] = TableQuery[Driver]
+  val drivers: TableQuery[Drivers] = TableQuery[Drivers]
   
   // Create a connection (called a "session") to an in-memory H2 database
   val db = Database.forURL("jdbc:h2:mem:formula1;DATABASE_TO_UPPER=false", driver = "org.h2.Driver")
@@ -21,20 +21,20 @@ object HelloSlick extends App {
     /* Create / Insert */
   
     // Insert some teams
-    teams += (1, "Red Bull", "Renault", 425, 710)
-    teams += (2, "Mercedes", "Mercedes", 300, 610)
-    teams += (3, "Ferrari", "Ferrari", 410, 700)
-    teams += (4, "McLaren", "Mercedes", 160, 500)
+    teams += Team(Some(1), "Red Bull", "Renault", 425, 710)
+    teams += Team(Some(2), "Mercedes", "Mercedes", 300, 610)
+    teams += Team(Some(3), "Ferrari", "Ferrari", 410, 700)
+    teams += Team(Some(4), "McLaren", "Mercedes", 160, 500)
 
     // Insert some drivers (using JDBC's batch insert feature)
     val driversInsertResult: Option[Int] = drivers ++= Seq (
-      ("Nico Rosberg", 2, 1985, 71),
-      ("Sebastian Vettel", 1, 1987, 58),
-      ("Fernando Alonso", 3, 1981, 68),
-      ("Jenson Button",   4, 1980, 72)
+      Driver("Nico Rosberg", 2, 1985, 71),
+      Driver("Sebastian Vettel", 1, 1987, 58),
+      Driver("Fernando Alonso", 3, 1981, 68),
+      Driver("Jenson Button",   4, 1980, 72)
     )
   
-    val allTeams: List[(Int, String, String, Int, Int)] =
+    val allTeams: List[Team] =
       teams.list
 
     // Print the number of rows inserted
@@ -49,7 +49,7 @@ object HelloSlick extends App {
     println("Generated SQL for base drivers query:\n" + drivers.selectStatement)
 
     // Query the drivers table using a foreach and print each row
-    drivers foreach { case (name, teamId, birthYear, weight) =>
+    drivers foreach { case Driver(name, teamId, birthYear, weight) =>
       println("  " + name + "\t" + teamId + "\t" + birthYear + "\t" + weight)
     }
 
@@ -57,7 +57,7 @@ object HelloSlick extends App {
     /* Filtering / Where */
 
     // Construct a query where the weight of drivers is > 70
-    val filterQuery: Query[Driver, (String, Int, Int, Int), Seq] =
+    val filterQuery: Query[Drivers, Driver, Seq] =
       drivers.filter(_.weight > 70)
 
     println("Generated SQL for filter query:\n" + filterQuery.selectStatement)
@@ -83,7 +83,7 @@ object HelloSlick extends App {
     /* Delete */
 
     // Construct a delete query that deletes drivers with a weight less than 70
-    val deleteQuery: Query[Driver,(String, Int, Int, Int), Seq] =
+    val deleteQuery: Query[Drivers, Driver, Seq] =
       drivers.filter(_.weight < 70)
 
     // Print the SQL for the drivers delete query
@@ -109,7 +109,7 @@ object HelloSlick extends App {
   
     /* Sorting / Order By */
   
-    val sortByPriceQuery: Query[Driver, (String, Int, Int, Int), Seq] =
+    val sortByPriceQuery: Query[Drivers, Driver, Seq] =
       drivers.sortBy(_.birthYear)
   
     println("Generated SQL for query sorted by birth year:\n" +

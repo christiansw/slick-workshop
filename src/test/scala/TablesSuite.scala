@@ -5,22 +5,33 @@ import scala.slick.jdbc.meta._
 
 class TablesSuite extends FunSuite with BeforeAndAfter {
 
-  val teams = TableQuery[Team]
-  val drivers = TableQuery[Driver]
+  //get complete f1 table (regex it)
+  //filter based on weight
+
+  //filter
+
+  //crud
+
+  //define result
+
+  //sum result
+
+
+  val teams = TableQuery[Teams]
+  val drivers = TableQuery[Drivers]
   
   implicit var session: Session = _
 
   def createSchema() = (teams.ddl ++ drivers.ddl).create
   
-  def insertTeam(): Int = teams += (101, "Red Bull", "Renault", 425, 710)
+  def insertTeam(): Int = teams += Team(Some(101), "Red Bull", "Renault", 425, 710)
   
   before {
-    session = Database.forURL("jdbc:h2:mem:test1", driver = "org.h2.Driver").createSession()
-  }
-  
-  test("Creating the Schema works") {
+    session = Database.forURL("jdbc:h2:mem:formula1", driver = "org.h2.Driver").createSession()
     createSchema()
-    
+  }
+
+  test("Creating the Schema works") {
     val tables = MTable.getTables.list
 
     assert(tables.size == 2)
@@ -29,20 +40,17 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
   }
 
   test("Inserting a team works") {
-    createSchema()
-    
     val insertCount = insertTeam()
     assert(insertCount == 1)
   }
   
-  test("Query teams works") {
-    createSchema()
+  test("Should return inserted team") {
     insertTeam()
     val results = teams.list
     assert(results.size == 1)
-    assert(results.head._1 == 101)
+    assert(results.head.id == Some(101))
   }
-  
+
   after {
     session.close()
   }
