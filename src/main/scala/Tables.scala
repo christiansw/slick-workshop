@@ -16,7 +16,7 @@ class Team(tag: Tag)
     (id, name, engineBrand, budget, employees)
 }
 
-// A Coffees table with 5 columns: name, supplier id, price, sales, total
+// A drivers table with 5 columns: name, team id, price, sales, total
 class Driver(tag: Tag)
   extends Table[(String, Int, Int, Int)](tag, "drivers") {
 

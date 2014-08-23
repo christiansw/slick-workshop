@@ -3,17 +3,17 @@ import scala.slick.driver.H2Driver.simple._
 // The main application
 object HelloSlick extends App {
 
-  // The query interface for the Suppliers table
+  // The query interface for the teams table
   val teams: TableQuery[Team] = TableQuery[Team]
 
-  // the query interface for the Coffees table
+  // the query interface for the drivers table
   val drivers: TableQuery[Driver] = TableQuery[Driver]
   
   // Create a connection (called a "session") to an in-memory H2 database
   val db = Database.forURL("jdbc:h2:mem:hello", driver = "org.h2.Driver")
   db.withSession { implicit session =>
 
-    // Create the schema by combining the DDLs for the Suppliers and Coffees
+    // Create the schema by combining the DDLs for the teams and drivers
     // tables using the query interfaces
     (teams.ddl ++ drivers.ddl).create
 
@@ -26,7 +26,7 @@ object HelloSlick extends App {
     teams += (3, "Ferrari", "Ferrari", 410, 700)
     teams += (4, "McLaren", "Mercedes", 160, 500)
 
-    // Insert some coffees (using JDBC's batch insert feature)
+    // Insert some drivers (using JDBC's batch insert feature)
     val driversInsertResult: Option[Int] = drivers ++= Seq (
       ("Nico Rosberg", 2, 1985, 71),
       ("Sebastian Vettel", 1, 1987, 58),
@@ -56,7 +56,7 @@ object HelloSlick extends App {
 
     /* Filtering / Where */
 
-    // Construct a query where the weight of Coffees is > 70
+    // Construct a query where the weight of drivers is > 70
     val filterQuery: Query[Driver, (String, Int, Int, Int), Seq] =
       drivers.filter(_.weight > 70)
 
@@ -71,7 +71,7 @@ object HelloSlick extends App {
     // Construct an update query with the sales column being the one to update
     val updateQuery: Query[Column[Int], Int, Seq] = drivers.map(_.weight)
 
-    // Print the SQL for the Coffees update query
+    // Print the SQL for the drivers update query
     println("Generated SQL for drivers update:\n" + updateQuery.updateStatement)
   
     // Perform the update
@@ -86,7 +86,7 @@ object HelloSlick extends App {
     val deleteQuery: Query[Driver,(String, Int, Int, Int), Seq] =
       drivers.filter(_.weight < 70)
 
-    // Print the SQL for the Coffees delete query
+    // Print the SQL for the drivers delete query
     println("Generated SQL for drivers delete:\n" + deleteQuery.deleteStatement)
 
     // Perform the delete
@@ -141,7 +141,7 @@ object HelloSlick extends App {
 
     println("Generated SQL for the join query:\n" + joinQuery.selectStatement)
 
-    // Print the rows which contain the coffee name and the supplier name
+    // Print the rows which contain the driver name and the team name
     println(joinQuery.list)
     
     
