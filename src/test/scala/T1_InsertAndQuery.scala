@@ -1,20 +1,13 @@
-import org.scalatest._
 import scala.slick.driver.H2Driver.simple._
-import scala.slick.jdbc.meta._
 
 
-class T1_InsertAndQuery extends FunSuite with BeforeAndAfter {
-  implicit var session: Session = null
+class T1_InsertAndQuery extends BaseFormula1Suite {
   val teams = TableQuery[Teams]
   val drivers = TableQuery[Drivers]
 
-  before {
-    session = Database.forURL("jdbc:h2:mem:formula1", driver = "org.h2.Driver").createSession()
+  override def beforeEach {
+    super.beforeEach()
     createSchema()
-  }
-
-  after {
-    session.close()
   }
 
   test("Should return inserted team") {

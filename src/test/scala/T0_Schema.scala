@@ -1,18 +1,8 @@
-import org.scalatest._
 import scala.slick.driver.H2Driver.simple._
 import scala.slick.jdbc.meta.MTable
 
 
-class T0_Schema extends FunSuite with BeforeAndAfter {
-  implicit var session: Session = null
-
-  before {
-    session = Database.forURL("jdbc:h2:mem:formula1", driver = "org.h2.Driver").createSession()
-  }
-
-  after {
-    session.close()
-  }
+class T0_Schema extends BaseFormula1Suite {
 
   test("Should create database schema") {
     val teams = TableQuery[Teams]
