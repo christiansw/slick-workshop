@@ -1,58 +1,35 @@
 import scala.slick.driver.H2Driver.simple._
 
-// The main application
-object HelloSlick extends App {
+//
+// Stuff that should be added to tests.
+//
+object FoodForTests extends App {
 
-  // The query interface for the teams table
   val teams: TableQuery[Teams] = TableQuery[Teams]
-
-  // the query interface for the drivers table
   val drivers: TableQuery[Drivers] = TableQuery[Drivers]
   
-  // Create a connection (called a "session") to an in-memory H2 database
   val db = Database.forURL("jdbc:h2:mem:formula1;DATABASE_TO_UPPER=false", driver = "org.h2.Driver")
   db.withSession { implicit session =>
 
-    // Create the schema by combining the DDLs for the teams and drivers
-    // tables using the query interfaces
+    //create schema
     (teams.ddl ++ drivers.ddl).create
 
-  
-    /* Create / Insert */
-  
-    // Insert some teams
+    // Insert some data
     teams += Team(Some(1), "Red Bull", "Renault", 425, 710)
     teams += Team(Some(2), "Mercedes", "Mercedes", 300, 610)
     teams += Team(Some(3), "Ferrari", "Ferrari", 410, 700)
     teams += Team(Some(4), "McLaren", "Mercedes", 160, 500)
 
-    // Insert some drivers (using JDBC's batch insert feature)
-    val driversInsertResult: Option[Int] = drivers ++= Seq (
-      Driver("Nico Rosberg", 2, 1985, 71),
-      Driver("Sebastian Vettel", 1, 1987, 58),
-      Driver("Fernando Alonso", 3, 1981, 68),
-      Driver("Jenson Button",   4, 1980, 72)
-    )
-  
-    val allTeams: List[Team] =
-      teams.list
+    drivers += Driver("Nico Rosberg", 2, 1985, 71)
+    drivers += Driver("Sebastian Vettel", 1, 1987, 58)
+    drivers += Driver("Fernando Alonso", 3, 1981, 68)
+    drivers += Driver("Jenson Button",   4, 1980, 72)
 
-    // Print the number of rows inserted
-    driversInsertResult foreach { numRows =>
-      println(s"Inserted $numRows rows into the drivers table")
-    }
-
-  
-    /* Read / Query / Select */
-  
-    // Print the SQL for the drivers query
-    println("Generated SQL for base drivers query:\n" + drivers.selectStatement)
 
     // Query the drivers table using a foreach and print each row
     drivers foreach { case Driver(name, teamId, birthYear, weight) =>
       println("  " + name + "\t" + teamId + "\t" + birthYear + "\t" + weight)
     }
-
 
     /* Filtering / Where */
 
