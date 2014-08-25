@@ -1,6 +1,6 @@
 
 
-class T1_InsertAndQuery extends BaseFormula1RepositorySuite {
+class T1_InsertAndQuery extends BaseFormula1RepositoryTest {
 
   test("Should return inserted team") {
     sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))

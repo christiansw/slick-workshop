@@ -1,6 +1,6 @@
 
 
-class T2_Filters extends BaseFormula1RepositorySuite {
+class T2_Filters extends BaseFormula1RepositoryTest {
 
   test("Should filter by minimum budget") {
     sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))

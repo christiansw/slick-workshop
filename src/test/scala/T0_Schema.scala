@@ -1,7 +1,7 @@
 import scala.slick.jdbc.meta.MTable
 
 
-class T0_Schema extends BaseFormula1RepositorySuite {
+class T0_Schema extends BaseFormula1RepositoryTest {
 
   test("Should create database schema") {
     val tables = MTable.getTables.list

@@ -2,7 +2,7 @@ import org.scalatest._
 import scala.slick.driver.H2Driver.simple._
 
 
-class BaseFormula1RepositorySuite extends FunSuite with BeforeAndAfterEach {
+class BaseFormula1RepositoryTest extends FunSuite with BeforeAndAfterEach {
   implicit var session: Session = _
   var sut: Formula1Repository = _
 
