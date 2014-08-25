@@ -14,4 +14,5 @@ class Formula1Repository(implicit s: Session) {
     val filterQuery: Query[Teams, Team, Seq] = teams.filter(_.budget > minimumBudget)
     filterQuery.list
   }
+  def getSumBudgets(implicit s: Session): Int = ???
 }
