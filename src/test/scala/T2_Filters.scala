@@ -2,6 +2,19 @@
 
 class T2_Filters extends BaseFormula1RepositoryTest {
 
+  test("Should find team by name") {
+    sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))
+    sut.insertTeam(Team(Some(2), "Mercedes", "Mercedes", 300, 610))
+
+    val emptyResult = sut.findTeamWithName("Daihatsu")
+    assert(emptyResult === None)
+
+
+    val result = sut.findTeamWithName("Mercedes")
+    assert(result === Some(Team(Some(2), "Mercedes", "Mercedes", 300, 610)))
+
+  }
+
   test("Should filter by minimum budget") {
     sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))
     sut.insertTeam(Team(Some(2), "Mercedes", "Mercedes", 300, 610))

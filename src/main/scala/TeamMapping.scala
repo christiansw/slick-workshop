@@ -12,4 +12,6 @@ class Teams(tag: Tag) extends Table[Team](tag, "teams") {
 
   // the * projection (e.g. select * ...) auto-transforms the tupled column values to / from a Team
   def * = (id.?, name, engineBrand, budget, employees) <> (Team.tupled, Team.unapply)
+
+  def nameIdx = index("team_name_idx", name, unique = true)
 }
