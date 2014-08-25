@@ -28,4 +28,6 @@ class Formula1Repository(implicit s: Session) {
       .map(_.employees)
       .update(employees)
 
+  def deleteTeam(id: Int): Int = teams.filter(_.id === id).delete
+
 }
