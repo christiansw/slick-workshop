@@ -14,5 +14,8 @@ class Formula1Repository(implicit s: Session) {
     val filterQuery: Query[Teams, Team, Seq] = teams.filter(_.budget > minimumBudget)
     filterQuery.list
   }
-  def getSumBudgets(implicit s: Session): Int = ???
+
+  def getSumBudgets(implicit s: Session): Option[Int] = teams.map(_.budget).sum.run
+  def getAverageEmployees(implicit s: Session): Option[Int] = teams.map(_.employees).avg.run
+
 }
