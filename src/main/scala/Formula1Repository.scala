@@ -22,6 +22,14 @@ class Formula1Repository(implicit s: Session) {
     val filterQuery: Query[Teams, Team, Seq] = teams.filter(_.budget > minimumBudget)
     filterQuery.list
   }
+  /*
+   * Alternative implementation using for comprehension. TODO: add to presentation
+    {
+      (for {
+        t <- teams if t.budget > minimumBudget
+      } yield t).list
+    }
+  */
 
   // T3_Aggregations
 
