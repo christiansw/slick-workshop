@@ -12,6 +12,16 @@ class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
     assert(results.head == Team(Some(1), "Red Bull", "Renault", 425, 710))
   }
 
+  test("Should return name of inserted teams") {
+    sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))
+    sut.insertTeam(Team(Some(2), "Mercedes", "Mercedes", 300, 610))
+
+    val results = sut.listTeamnames()
+
+    assert(results.size == 2)
+    results should contain theSameElementsAs List("Red Bull", "Mercedes")
+  }
+
   test("Should not allow two teams with the same name") {
     sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))
     val e = intercept[JdbcSQLException] {
