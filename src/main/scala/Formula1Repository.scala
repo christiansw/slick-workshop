@@ -15,8 +15,8 @@ class Formula1Repository(implicit s: Session) {
     filterQuery.list
   }
 
-  def findTeamWithName(name: String): Option[Team] = teams.filter(_.name === name).run.headOption
-  def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).run.headOption
+  def findTeamWithName(name: String): Option[Team] = teams.filter(_.name === name).firstOption
+  def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).firstOption
 
   def getSumBudgets(implicit s: Session): Option[Int] = teams.map(_.budget).sum.run
   def getAverageEmployees(implicit s: Session): Option[Int] = teams.map(_.employees).avg.run
