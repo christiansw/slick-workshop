@@ -6,30 +6,40 @@ class Formula1Repository(implicit s: Session) {
   val drivers = TableQuery[Drivers]
   (teams.ddl ++ drivers.ddl).create
 
+  // T1_InsertAndQuery
+
   def insertTeam(team: Team) = teams += team
   def insertDriver(driver: Driver) = drivers += driver
+
   def listTeams(implicit s: Session): List[Team] = teams.list
   def listDrivers(implicit s: Session): List[Driver] = drivers.list
+  def driversOrderedByAgeAndWeight(): Seq[Driver] = drivers.sortBy(d => (d.birthYear, d.weight.desc)).run
+
+  // T2_Filters
+
+  def findTeamWithName(name: String): Option[Team] = teams.filter(_.name === name).firstOption
   def listTeamsWithBudgetAbove(minimumBudget: Int)(implicit s: Session) = {
     val filterQuery: Query[Teams, Team, Seq] = teams.filter(_.budget > minimumBudget)
     filterQuery.list
   }
 
-  def findTeamWithName(name: String): Option[Team] = teams.filter(_.name === name).firstOption
-  def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).firstOption
+  // T3_Aggregations
 
   def getSumBudgets(implicit s: Session): Option[Int] = teams.map(_.budget).sum.run
   def getAverageEmployees(implicit s: Session): Option[Int] = teams.map(_.employees).avg.run
 
-  def update(team: Team): Int = teams.filter(_.id === team.id).update(team)
+  // T4_UpdateAndDelete
 
+  def update(team: Team): Int = teams.filter(_.id === team.id).update(team)
   def updateEmployees(id: Int, employees: Int) =
     teams.filter(_.id === id)
       .map(_.employees)
       .update(employees)
-
   def deleteTeam(id: Int): Int = teams.filter(_.id === id).delete
+  def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).firstOption
 
-  def driversOrderedByAgeAndWeight(): Seq[Driver] = drivers.sortBy(d => (d.birthYear, d.weight.desc)).run
+  // T5_Joins
+
   def getDriversWithTeam(): Seq[(Driver, Team)] = (drivers join teams on (_.teamId === _.id)).run
+
 }
