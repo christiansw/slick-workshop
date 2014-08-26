@@ -31,5 +31,5 @@ class Formula1Repository(implicit s: Session) {
   def deleteTeam(id: Int): Int = teams.filter(_.id === id).delete
 
   def driversOrderedByAgeAndWeight(): Seq[Driver] = drivers.sortBy(d => (d.birthYear, d.weight.desc)).run
-
+  def getDriversWithTeam(): Seq[(Driver, Team)] = (drivers join teams on (_.teamId === _.id)).run
 }
