@@ -27,6 +27,14 @@ class Formula1Repository(implicit s: Session) {
 
   def getSumBudgets(implicit s: Session): Option[Int] = teams.map(_.budget).sum.run
   def getAverageEmployees(implicit s: Session): Option[Int] = teams.map(_.employees).avg.run
+  def listNumberOfDriversPerTeam(): Seq[(String, Int)] = {
+    (for {
+      d <- drivers
+      t <- d.team
+    } yield (d, t)).groupBy(_._2.id).map {
+      case (_, grouped) => (grouped.map(_._2.name).max.get, grouped.length)
+    }.run
+  }
 
   // T4_UpdateAndDelete
 
@@ -40,6 +48,6 @@ class Formula1Repository(implicit s: Session) {
 
   // T5_Joins
 
-  def getDriversWithTeam(): Seq[(Driver, Team)] = (drivers join teams on (_.teamId === _.id)).run
+  def listDriversWithTeam(): Seq[(Driver, Team)] = (drivers join teams on (_.teamId === _.id)).run
 
 }

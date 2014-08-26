@@ -13,7 +13,7 @@ class T5_Joins extends BaseFormula1RepositoryTest with Matchers {
     sut.insertTeam(mercedes)
     sut.insertDriver(nicoRosberg)
 
-    val results = sut.getDriversWithTeam()
+    val results = sut.listDriversWithTeam()
 
     assert(results.size === 2)
     results should contain allOf((sebastianVettel, redBull), (nicoRosberg, mercedes))
