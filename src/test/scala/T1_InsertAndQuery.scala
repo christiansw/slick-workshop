@@ -1,6 +1,7 @@
 import org.h2.jdbc.JdbcSQLException
+import org.scalatest.Matchers
 
-class T1_InsertAndQuery extends BaseFormula1RepositoryTest {
+class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
 
   test("Should return inserted team") {
     sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))
@@ -27,6 +28,27 @@ class T1_InsertAndQuery extends BaseFormula1RepositoryTest {
 
     assert(results.size == 1)
     assert(results.head == Driver("Nico Rosberg", 2, 1985, 71))
+  }
+
+  test("Should order drivers by age (high to low), then weight (high to low)") {
+    val sebastianVettel = Driver("Sebastian Vettel", 1, 1987, 58)
+    val danielRicciardo = Driver("Daniel Ricciardo", 1, 1989, 65)
+    val nicoRosberg = Driver("Nico Rosberg", 2, 1985, 71)
+    val lewisHamilton = Driver("Lewis Hamilton", 2, 1985, 68)
+
+    sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))
+    sut.insertDriver(sebastianVettel)
+    sut.insertDriver(danielRicciardo)
+
+    sut.insertTeam(Team(Some(2), "Mercedes", "Mercedes", 600, 845))
+    sut.insertDriver(nicoRosberg)
+    sut.insertDriver(lewisHamilton)
+
+    val results = sut.driversOrderedByAgeAndWeight()
+
+    assert(results.size === 4)
+    results should contain theSameElementsInOrderAs Seq(nicoRosberg, lewisHamilton, sebastianVettel, danielRicciardo)
+
   }
 
   //TODO: Test join of team into driver
