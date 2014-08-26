@@ -8,7 +8,7 @@ class T3_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     sut.insertTeam(Team(Some(3), "Ferrari", "Ferrari", 410, 700))
     sut.insertTeam(Team(Some(4), "McLaren", "Mercedes", 160, 500))
 
-    val result = sut.getSumBudgets(session)
+    val result = sut.sumBudgets()
 
     assert((425 + 300 + 410 + 160) == result.get)
   }
@@ -19,7 +19,7 @@ class T3_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     sut.insertTeam(Team(Some(3), "Ferrari", "Ferrari", 410, 700))
     sut.insertTeam(Team(Some(4), "McLaren", "Mercedes", 160, 500))
 
-    val result = sut.getAverageEmployees(session)
+    val result = sut.averageEmployees()
 
     assert(((710 + 610 + 700 + 500) / 4) == result.get)
   }
@@ -35,7 +35,7 @@ class T3_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     val results = sut.listNumberOfDriversPerTeam()
     assert(results.size === 2)
 
-    results should contain theSameElementsAs Seq(("Red Bull", 2), ("Mercedes", 1))
+    results should contain theSameElementsAs List(("Red Bull", 2), ("Mercedes", 1))
   }
 
 }

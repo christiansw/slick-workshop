@@ -6,7 +6,7 @@ class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
   test("Should return inserted team") {
     sut.insertTeam(Team(Some(1), "Red Bull", "Renault", 425, 710))
 
-    val results = sut.listTeams(session)
+    val results = sut.listTeams()
 
     assert(results.size == 1)
     assert(results.head == Team(Some(1), "Red Bull", "Renault", 425, 710))
@@ -34,7 +34,7 @@ class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
     sut.insertTeam(Team(Some(2), "Mercedes", "Mercedes", 300, 610))
     sut.insertDriver(Driver("Nico Rosberg", 2, 1985, 71))
 
-    val results = sut.listDrivers(session)
+    val results = sut.listDrivers()
 
     assert(results.size == 1)
     assert(results.head == Driver("Nico Rosberg", 2, 1985, 71))
@@ -57,10 +57,8 @@ class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
     val results = sut.driversOrderedByAgeAndWeight()
 
     assert(results.size === 4)
-    results should contain theSameElementsInOrderAs Seq(nicoRosberg, lewisHamilton, sebastianVettel, danielRicciardo)
+    results should contain theSameElementsInOrderAs List(nicoRosberg, lewisHamilton, sebastianVettel, danielRicciardo)
 
   }
-
-  //TODO: Test join of team into driver
 
 }
