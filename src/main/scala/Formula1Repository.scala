@@ -71,6 +71,7 @@ class Formula1Repository(implicit s: Session) {
     }.list
   }
 
+  // Bonus task:
   def listNumberOfDriversPerTeam(): List[(String, Int)] = {
     (for {
       driver <- drivers
