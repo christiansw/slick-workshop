@@ -15,10 +15,10 @@ object FoodForTests extends App {
     (teams.ddl ++ drivers.ddl).create
 
     // Insert some data
-    teams += Team(Some(1), "Red Bull", "Renault", 425, 710)
-    teams += Team(Some(2), "Mercedes", "Mercedes", 300, 610)
-    teams += Team(Some(3), "Ferrari", "Ferrari", 410, 700)
-    teams += Team(Some(4), "McLaren", "Mercedes", 160, 500)
+    teams += Team(1, "Red Bull", "Renault", 425, 710)
+    teams += Team(2, "Mercedes", "Mercedes", 300, 610)
+    teams += Team(3, "Ferrari", "Ferrari", 410, 700)
+    teams += Team(4, "McLaren", "Mercedes", 160, 500)
 
     drivers += Driver("Nico Rosberg", 2, 1985, 71)
     drivers += Driver("Sebastian Vettel", 1, 1987, 58)

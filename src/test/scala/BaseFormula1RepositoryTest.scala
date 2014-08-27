@@ -10,6 +10,7 @@ class BaseFormula1RepositoryTest extends FunSuite with BeforeAndAfterEach {
     val db = Database.forURL("jdbc:h2:mem:formula1", driver = "org.h2.Driver")
     session = db.createSession()
     sut = new Formula1Repository()
+    sut.createSchema()
   }
 
   override def afterEach {

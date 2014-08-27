@@ -4,7 +4,10 @@ class Formula1Repository(implicit s: Session) {
 
   val teams = TableQuery[Teams]
   val drivers = TableQuery[Drivers]
-  (teams.ddl ++ drivers.ddl).create
+
+  def createSchema() {
+    (teams.ddl ++ drivers.ddl).create
+  }
 
   // T1_InsertAndQuery
 
@@ -58,5 +61,4 @@ class Formula1Repository(implicit s: Session) {
   // T5_Joins
 
   def listDriversWithTeam(): List[(Driver, Team)] = (drivers join teams on (_.teamId === _.id)).list
-
 }
