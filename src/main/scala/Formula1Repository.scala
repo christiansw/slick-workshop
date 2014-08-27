@@ -5,6 +5,8 @@ class Formula1Repository(implicit s: Session) {
   val teams = TableQuery[Teams]
   val drivers = TableQuery[Drivers]
 
+  // T0_Schema
+
   def createSchema() {
     (teams.ddl ++ drivers.ddl).create
   }
@@ -33,7 +35,7 @@ class Formula1Repository(implicit s: Session) {
     filterQuery.list
   }
   /*
-   * Alternative implementation using for comprehension. TODO: add to presentation
+    Alternative implementation using for comprehension:
     {
       (for {
         t <- teams if t.budget > minimumBudget
