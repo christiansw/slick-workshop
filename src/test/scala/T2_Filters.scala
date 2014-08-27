@@ -9,7 +9,6 @@ class T2_Filters extends BaseFormula1RepositoryTest {
     val emptyResult = sut.findTeamWithName("Daihatsu")
     assert(emptyResult === None)
 
-
     val result = sut.findTeamWithName("Mercedes")
     assert(result === Some(Team(2, "Mercedes", "Mercedes", 300, 610)))
 
