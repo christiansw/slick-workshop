@@ -32,14 +32,14 @@ class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
     assert(e.getMessage contains "Unique index or primary key violation")
   }
 
-  test("Should list inserted driver") {
+  test("Should list inserted drivers") {
     val mercedes = sut.insertTeam(teamWithName("Mercedes"))
+    val lewisHamilton = sut.insertDriver(driverWithName("Lewis Hamilton", mercedes.id))
     val nicoRosberg = sut.insertDriver(driverWithName("Nico Rosberg", mercedes.id))
 
     val results = sut.listDrivers()
 
-    assert(results.size == 1)
-    assert(results.head == nicoRosberg)
+    results should contain theSameElementsAs List(lewisHamilton, nicoRosberg)
   }
 
   test("Should order drivers by age (high to low), then weight (high to low)") {
