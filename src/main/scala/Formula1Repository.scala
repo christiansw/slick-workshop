@@ -4,13 +4,13 @@ class Formula1Repository(implicit s: Session) {
   val teams = TableQuery[Teams]
   val drivers = TableQuery[Drivers]
 
-  // T0_Schema
+  // T0_Schema:
 
   def createSchema() {
     (teams.ddl ++ drivers.ddl).create
   }
 
-  // T1_InsertAndQuery
+  // T1_InsertAndQuery:
 
   def insertTeam(team: Team): Team = {
     teams += team
@@ -20,41 +20,45 @@ class Formula1Repository(implicit s: Session) {
     drivers += driver
     driver
   }
-
   def listTeams(): List[Team] = teams.list
   def listTeamNames(): List[String] = teams.map(_.name).list
   def listDrivers(): List[Driver] = drivers.list
-  def driversOrderedByAgeAndWeight(): List[Driver] = drivers.sortBy(d => (d.birthYear, d.weight.desc)).list
+  def driversOrderedByAgeAndWeight(): List[Driver] = {
+    drivers.sortBy(d => (d.birthYear, d.weight.desc)).list
+  }
 
-  // T2_Filters
+  // T2_Filters:
 
-  def findTeamWithName(name: String): Option[Team] = teams.filter(_.name === name).firstOption
+  def findTeamWithName(name: String): Option[Team] = {
+    teams.filter(_.name === name).firstOption
+  }
   def listTeamsWithBudgetAbove(minimumBudget: Int): List[Team] = {
-    val filterQuery: Query[Teams, Team, Seq] = teams.filter(_.budget > minimumBudget)
-    filterQuery.list
+    teams.filter(_.budget > minimumBudget).list
   }
   /*
     Alternative implementation using for comprehension:
     {
       (for {
-        t <- teams if t.budget > minimumBudget
-      } yield t).list
+        team <- teams if team.budget > minimumBudget
+      } yield team).list
     }
   */
 
-  // T3_Joins
+  // T3_Joins:
 
-  def listDriversWithTeam(): List[(Driver, Team)] = (drivers join teams on (_.teamId === _.id)).list
+  def listDriversWithTeam(): List[(Driver, Team)] = {
+    (drivers join teams on (_.teamId === _.id)).list
+  }
 
-  // T4_UpdateAndDelete
+  // T4_UpdateAndDelete:
 
   def update(team: Team): Int = teams.filter(_.id === team.id).update(team)
-  def updateEmployees(id: Int, employees: Int): Int =
-    teams.filter(_.id === id)
-      .map(_.employees)
-      .update(employees)
   def deleteTeam(id: Int): Int = teams.filter(_.id === id).delete
   def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).firstOption
+  def updateEmployees(id: Int, newEmployees: Int): Int =
+    teams.filter(_.id === id)
+      .map(_.employees)
+      .update(newEmployees)
 
   // T5_Aggregations
 
