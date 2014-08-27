@@ -34,7 +34,7 @@ class T5_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     sut.insertDriver(driverWithWeight("Nico Rosberg", 71, mercedes.id))
     sut.insertDriver(driverWithWeight("Lewis Hamilton", 66, mercedes.id))
 
-    val results = sut.getMaxDriverWeightPerTeam()
+    val results = sut.listMaxDriverWeightPerTeam()
     assert(results.size === 2)
 
     results should contain theSameElementsAs List(
@@ -43,7 +43,7 @@ class T5_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     )
   }
 
-  test("Should get number of drivers per team") {
+  test("BONUS TASK: Should get number of drivers per team") {
     val redBull = sut.insertTeam(teamWithName("Red Bull"))
     sut.insertDriver(driverWithName("Sebastian Vettel", redBull.id))
     sut.insertDriver(driverWithName("Daniel Ricciardo", redBull.id))

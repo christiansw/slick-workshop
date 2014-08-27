@@ -60,12 +60,12 @@ class Formula1Repository(implicit s: Session) {
       .map(_.employees)
       .update(newEmployees)
 
-  // T5_Aggregations
+  // T5_Aggregations:
 
   def sumBudgets(): Option[Int] = teams.map(_.budget).sum.run
   def averageEmployees(): Option[Int] = teams.map(_.employees).avg.run
 
-  def getMaxDriverWeightPerTeam(): List[(Int, Option[Int])] = {
+  def listMaxDriverWeightPerTeam(): List[(Int, Option[Int])] = {
     drivers.groupBy(_.teamId).map {
       case (teamId, drivers) => (teamId, drivers.map(_.weight).max)
     }.list

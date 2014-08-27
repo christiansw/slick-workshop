@@ -26,16 +26,11 @@ class T4_UpdateAndDelete extends BaseFormula1RepositoryTest {
   }
 
   test("Should update employees on team") {
-    val teamId = 1
+    val redBull = sut.insertTeam(ObjectMother.teamWithEmployees("Red Bull", 710))
 
-    sut.insertTeam(Team(teamId, "Red Bull", "Renault", 425, 710))
+    sut.updateEmployees(redBull.id, 999)
+    val updatedTeam = sut.findTeamById(redBull.id)
 
-    val updatedRows = sut.updateEmployees(teamId, 999)
-    assert(updatedRows === 1)
-
-    val updatedTeam = sut.findTeamById(teamId)
-    assert(updatedTeam === Some(Team(teamId, "Red Bull", "Renault", 425, 999)))
+    assert(updatedTeam.get.employees === 999)
   }
-
-
 }
