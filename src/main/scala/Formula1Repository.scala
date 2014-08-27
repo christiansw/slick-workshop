@@ -1,7 +1,6 @@
 import scala.slick.driver.H2Driver.simple._
 
 class Formula1Repository(implicit s: Session) {
-
   val teams = TableQuery[Teams]
   val drivers = TableQuery[Drivers]
 
@@ -47,11 +46,20 @@ class Formula1Repository(implicit s: Session) {
 
   def sumBudgets(): Option[Int] = teams.map(_.budget).sum.run
   def averageEmployees(): Option[Int] = teams.map(_.employees).avg.run
+  def listAverageWeightPerTeam(): List[(String, Option[Int])] = {
+    (for {
+      driver <- drivers
+      team <- driver.team
+    } yield (driver, team)).groupBy(_._2.id).map {
+      case (_, grouped) => (grouped.map(_._2.name).max.get, grouped.map(_._1.weight).avg)
+    }.list
+  }
+
   def listNumberOfDriversPerTeam(): List[(String, Int)] = {
     (for {
-      d <- drivers
-      t <- d.team
-    } yield (d, t)).groupBy(_._2.id).map {
+      driver <- drivers
+      team <- driver.team
+    } yield (driver, team)).groupBy(_._2.id).map {
       case (_, grouped) => (grouped.map(_._2.name).max.get, grouped.length)
     }.list
   }
