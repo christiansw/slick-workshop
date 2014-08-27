@@ -25,7 +25,7 @@ class T3_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     assert(((710 + 610 + 700 + 500) / 4) == result.get)
   }
 
-  test("Should return average driver weight per team") {
+  test("Should return heaviest driver's weight per team") {
     val redBull = sut.insertTeam(teamWithName("Red Bull"))
     sut.insertDriver(driverWithWeight("Sebastian Vettel", 58, redBull.id))
     sut.insertDriver(driverWithWeight("Daniel Ricciardo", 64, redBull.id))
@@ -34,12 +34,12 @@ class T3_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     sut.insertDriver(driverWithWeight("Nico Rosberg", 71, mercedes.id))
     sut.insertDriver(driverWithWeight("Lewis Hamilton", 66, mercedes.id))
 
-    val results = sut.listAverageWeightPerTeam()
+    val results = sut.getMaxDriverWeightPerTeam()
     assert(results.size === 2)
 
     results should contain theSameElementsAs List(
-      ("Red Bull", Some((58 + 64) / 2)),
-      ("Mercedes", Some((71 + 66) / 2))
+      (redBull.id, Some(64)),
+      (mercedes.id, Some(71))
     )
   }
 

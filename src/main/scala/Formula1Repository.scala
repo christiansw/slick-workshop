@@ -46,12 +46,10 @@ class Formula1Repository(implicit s: Session) {
 
   def sumBudgets(): Option[Int] = teams.map(_.budget).sum.run
   def averageEmployees(): Option[Int] = teams.map(_.employees).avg.run
-  def listAverageWeightPerTeam(): List[(String, Option[Int])] = {
-    (for {
-      driver <- drivers
-      team <- driver.team
-    } yield (driver, team)).groupBy(_._2.id).map {
-      case (_, grouped) => (grouped.map(_._2.name).max.get, grouped.map(_._1.weight).avg)
+
+  def getMaxDriverWeightPerTeam(): List[(Int, Option[Int])] = {
+    drivers.groupBy(_.teamId).map {
+      case (teamId, drivers) => (teamId, drivers.map(_.weight).max)
     }.list
   }
 
