@@ -1,7 +1,7 @@
 import ObjectMother.{driverWithName, teamWithName}
 import org.scalatest.Matchers
 
-class T5_Joins extends BaseFormula1RepositoryTest with Matchers {
+class T3_Joins extends BaseFormula1RepositoryTest with Matchers {
 
   test("Should get drivers and their team") {
     val redBull = sut.insertTeam(teamWithName("Red Bull"))

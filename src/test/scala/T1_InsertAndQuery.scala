@@ -4,23 +4,22 @@ import org.scalatest.Matchers
 
 class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
 
-  test("Should list inserted team") {
+  test("Should list inserted teams") {
     val redBull = sut.insertTeam(teamWithName("Red Bull"))
+    val lotus = sut.insertTeam(teamWithName("Lotus"))
 
     val results = sut.listTeams()
 
-    assert(results.size == 1)
-    assert(results.head == redBull)
+    results should contain theSameElementsAs List(redBull, lotus)
   }
 
   test("Should list names of inserted teams") {
-    sut.insertTeam(teamWithName("Red Bull"))
-    sut.insertTeam(teamWithName("Mercedes"))
+    sut.insertTeam(teamWithName("Williams"))
+    sut.insertTeam(teamWithName("Sauber"))
 
     val results = sut.listTeamNames()
 
-    assert(results.size == 2)
-    results should contain theSameElementsAs List("Red Bull", "Mercedes")
+    results should contain theSameElementsAs List("Williams", "Sauber")
   }
 
   test("Should not allow two teams with the same name") {
@@ -54,8 +53,7 @@ class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
 
     val results = sut.driversOrderedByAgeAndWeight()
 
-    assert(results.size === 4)
-    results should contain theSameElementsInOrderAs 
+    results should contain theSameElementsInOrderAs
       List(nicoRosberg, lewisHamilton, sebastianVettel, danielRicciardo)
   }
 

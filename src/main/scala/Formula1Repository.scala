@@ -42,7 +42,21 @@ class Formula1Repository(implicit s: Session) {
     }
   */
 
-  // T3_Aggregations
+  // T3_Joins
+
+  def listDriversWithTeam(): List[(Driver, Team)] = (drivers join teams on (_.teamId === _.id)).list
+
+  // T4_UpdateAndDelete
+
+  def update(team: Team): Int = teams.filter(_.id === team.id).update(team)
+  def updateEmployees(id: Int, employees: Int): Int =
+    teams.filter(_.id === id)
+      .map(_.employees)
+      .update(employees)
+  def deleteTeam(id: Int): Int = teams.filter(_.id === id).delete
+  def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).firstOption
+
+  // T5_Aggregations
 
   def sumBudgets(): Option[Int] = teams.map(_.budget).sum.run
   def averageEmployees(): Option[Int] = teams.map(_.employees).avg.run
@@ -62,17 +76,4 @@ class Formula1Repository(implicit s: Session) {
     }.list
   }
 
-  // T4_UpdateAndDelete
-
-  def update(team: Team): Int = teams.filter(_.id === team.id).update(team)
-  def updateEmployees(id: Int, employees: Int): Int =
-    teams.filter(_.id === id)
-      .map(_.employees)
-      .update(employees)
-  def deleteTeam(id: Int): Int = teams.filter(_.id === id).delete
-  def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).firstOption
-
-  // T5_Joins
-
-  def listDriversWithTeam(): List[(Driver, Team)] = (drivers join teams on (_.teamId === _.id)).list
 }

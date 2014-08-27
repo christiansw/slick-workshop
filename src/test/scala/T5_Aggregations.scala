@@ -1,7 +1,7 @@
 import ObjectMother._
 import org.scalatest.Matchers
 
-class T3_Aggregations extends BaseFormula1RepositoryTest with Matchers {
+class T5_Aggregations extends BaseFormula1RepositoryTest with Matchers {
 
   test("Should sum all budgets") {
     sut.insertTeam(teamWithBudget("Red Bull", 425))
