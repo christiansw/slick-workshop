@@ -1,64 +1,62 @@
+import ObjectMother.{driverWithName, teamWithName}
 import org.h2.jdbc.JdbcSQLException
 import org.scalatest.Matchers
 
 class T1_InsertAndQuery extends BaseFormula1RepositoryTest with Matchers {
 
-  test("Should return inserted team") {
-    sut.insertTeam(Team(1, "Red Bull", "Renault", 425, 710))
+  test("Should list inserted team") {
+    val redBull = sut.insertTeam(teamWithName("Red Bull"))
 
     val results = sut.listTeams()
 
     assert(results.size == 1)
-    assert(results.head == Team(1, "Red Bull", "Renault", 425, 710))
+    assert(results.head == redBull)
   }
 
-  test("Should return name of inserted teams") {
-    sut.insertTeam(Team(1, "Red Bull", "Renault", 425, 710))
-    sut.insertTeam(Team(2, "Mercedes", "Mercedes", 300, 610))
+  test("Should list names of inserted teams") {
+    sut.insertTeam(teamWithName("Red Bull"))
+    sut.insertTeam(teamWithName("Mercedes"))
 
-    val results = sut.listTeamnames()
+    val results = sut.listTeamNames()
 
     assert(results.size == 2)
     results should contain theSameElementsAs List("Red Bull", "Mercedes")
   }
 
   test("Should not allow two teams with the same name") {
-    sut.insertTeam(Team(1, "Red Bull", "Renault", 425, 710))
+    sut.insertTeam(teamWithName("Red Bull"))
+
     val e = intercept[JdbcSQLException] {
-      sut.insertTeam(Team(2, "Red Bull", "Mercedes", 600, 845))
+      sut.insertTeam(teamWithName("Red Bull"))
     }
+
     assert(e.getMessage contains "Unique index or primary key violation")
   }
 
-  test("Should return inserted driver") {
-    sut.insertTeam(Team(2, "Mercedes", "Mercedes", 300, 610))
-    sut.insertDriver(Driver("Nico Rosberg", 2, 1985, 71))
+  test("Should list inserted driver") {
+    val mercedes = sut.insertTeam(teamWithName("Mercedes"))
+    val nicoRosberg = sut.insertDriver(driverWithName("Nico Rosberg", mercedes.id))
 
     val results = sut.listDrivers()
 
     assert(results.size == 1)
-    assert(results.head == Driver("Nico Rosberg", 2, 1985, 71))
+    assert(results.head == nicoRosberg)
   }
 
   test("Should order drivers by age (high to low), then weight (high to low)") {
-    val sebastianVettel = Driver("Sebastian Vettel", 1, 1987, 58)
-    val danielRicciardo = Driver("Daniel Ricciardo", 1, 1989, 65)
-    val nicoRosberg = Driver("Nico Rosberg", 2, 1985, 71)
-    val lewisHamilton = Driver("Lewis Hamilton", 2, 1985, 68)
+    val redBull = sut.insertTeam(teamWithName("Red Bull"))
+    val mercedes = sut.insertTeam(teamWithName("Mercedes"))
 
-    sut.insertTeam(Team(1, "Red Bull", "Renault", 425, 710))
-    sut.insertDriver(sebastianVettel)
-    sut.insertDriver(danielRicciardo)
-
-    sut.insertTeam(Team(2, "Mercedes", "Mercedes", 600, 845))
-    sut.insertDriver(nicoRosberg)
-    sut.insertDriver(lewisHamilton)
+    val sebastianVettel = sut.insertDriver(Driver("Sebastian Vettel", redBull.id, 1987, 58))
+    val danielRicciardo = sut.insertDriver(Driver("Daniel Ricciardo", redBull.id, 1989, 65))
+    val nicoRosberg = sut.insertDriver(Driver("Nico Rosberg", mercedes.id, 1985, 71))
+    val lewisHamilton = sut.insertDriver(Driver("Lewis Hamilton", mercedes.id, 1985, 68))
 
     val results = sut.driversOrderedByAgeAndWeight()
 
     assert(results.size === 4)
-    results should contain theSameElementsInOrderAs List(nicoRosberg, lewisHamilton, sebastianVettel, danielRicciardo)
-
+    results should contain theSameElementsInOrderAs 
+      List(nicoRosberg, lewisHamilton, sebastianVettel, danielRicciardo)
   }
 
 }

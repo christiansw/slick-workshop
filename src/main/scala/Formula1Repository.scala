@@ -11,11 +11,17 @@ class Formula1Repository(implicit s: Session) {
 
   // T1_InsertAndQuery
 
-  def insertTeam(team: Team) = teams += team
-  def insertDriver(driver: Driver) = drivers += driver
+  def insertTeam(team: Team): Team = {
+    teams += team
+    team
+  }
+  def insertDriver(driver: Driver): Driver = {
+    drivers += driver
+    driver
+  }
 
   def listTeams(): List[Team] = teams.list
-  def listTeamnames(): List[String] = teams.map(_.name).list
+  def listTeamNames(): List[String] = teams.map(_.name).list
   def listDrivers(): List[Driver] = drivers.list
   def driversOrderedByAgeAndWeight(): List[Driver] = drivers.sortBy(d => (d.birthYear, d.weight.desc)).list
 

@@ -1,12 +1,13 @@
+import ObjectMother.{teamWithEmployees, teamWithBudget}
 import org.scalatest.Matchers
 
 class T3_Aggregations extends BaseFormula1RepositoryTest with Matchers {
 
   test("Should sum all budgets") {
-    sut.insertTeam(Team(1, "Red Bull", "Renault", 425, 710))
-    sut.insertTeam(Team(2, "Mercedes", "Mercedes", 300, 610))
-    sut.insertTeam(Team(3, "Ferrari", "Ferrari", 410, 700))
-    sut.insertTeam(Team(4, "McLaren", "Mercedes", 160, 500))
+    sut.insertTeam(teamWithBudget("Red Bull", 425))
+    sut.insertTeam(teamWithBudget("Mercedes", 300))
+    sut.insertTeam(teamWithBudget("Ferrari", 410))
+    sut.insertTeam(teamWithBudget("McLaren", 160))
 
     val result = sut.sumBudgets()
 
@@ -14,10 +15,10 @@ class T3_Aggregations extends BaseFormula1RepositoryTest with Matchers {
   }
 
   test("Should get average number of employees"){
-    sut.insertTeam(Team(1, "Red Bull", "Renault", 425, 710))
-    sut.insertTeam(Team(2, "Mercedes", "Mercedes", 300, 610))
-    sut.insertTeam(Team(3, "Ferrari", "Ferrari", 410, 700))
-    sut.insertTeam(Team(4, "McLaren", "Mercedes", 160, 500))
+    sut.insertTeam(teamWithEmployees("Red Bull", 710))
+    sut.insertTeam(teamWithEmployees("Mercedes", 610))
+    sut.insertTeam(teamWithEmployees("Ferrari", 700))
+    sut.insertTeam(teamWithEmployees("McLaren", 500))
 
     val result = sut.averageEmployees()
 
