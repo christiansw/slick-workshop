@@ -1,84 +1,43 @@
 import scala.slick.driver.H2Driver.simple._
 
 class Formula1Repository(implicit s: Session) {
-  val teams = TableQuery[Teams]
-  val drivers = TableQuery[Drivers]
 
   // T0_Schema:
 
-  def createSchema() {
-    (teams.ddl ++ drivers.ddl).create
-  }
+  def createSchema()  = ???
 
   // T1_InsertAndQuery:
 
-  def insertTeam(team: Team): Team = {
-    teams += team
-    team
-  }
-  def insertDriver(driver: Driver): Driver = {
-    drivers += driver
-    driver
-  }
-  def listTeams(): List[Team] = teams.list
-  def listTeamNames(): List[String] = teams.map(_.name).list
-  def listDrivers(): List[Driver] = drivers.list
-  def driversOrderedByAgeAndWeight(): List[Driver] = {
-    drivers.sortBy(d => (d.birthYear, d.weight.desc)).list
-  }
+  def insertTeam(team: Team): Team = ???
+  def insertDriver(driver: Driver): Driver = ???
+  def listTeams(): List[Team] = ???
+  def listTeamNames(): List[String] = ???
+  def listDrivers(): List[Driver] = ???
+  def driversOrderedByAgeAndWeight(): List[Driver] = ???
 
   // T2_Filters:
 
-  def findTeamWithName(name: String): Option[Team] = {
-    teams.filter(_.name === name).firstOption
-  }
-  def listTeamsWithBudgetAbove(minimumBudget: Int): List[Team] = {
-    teams.filter(_.budget > minimumBudget).list
-  }
-  /*
-    Alternative implementation using for comprehension:
-    {
-      (for {
-        team <- teams if team.budget > minimumBudget
-      } yield team).list
-    }
-  */
+  def findTeamWithName(name: String): Option[Team] = ???
+  def listTeamsWithBudgetAbove(minimumBudget: Int): List[Team] = ???
 
   // T3_Joins:
 
-  def listDriversWithTeam(): List[(Driver, Team)] = {
-    (drivers join teams on (_.teamId === _.id)).list
-  }
+  def listDriversWithTeam(): List[(Driver, Team)] = ???
 
   // T4_UpdateAndDelete:
 
-  def update(team: Team): Int = teams.filter(_.id === team.id).update(team)
-  def deleteTeam(id: Int): Int = teams.filter(_.id === id).delete
-  def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).firstOption
-  def updateEmployees(id: Int, newEmployees: Int): Int =
-    teams.filter(_.id === id)
-      .map(_.employees)
-      .update(newEmployees)
+  def update(team: Team): Int = ???
+  def deleteTeam(id: Int): Int = ???
+  def findTeamById(id: Int): Option[Team] = ???
+  def updateEmployees(id: Int, newEmployees: Int): Int = ???
 
   // T5_Aggregations:
 
-  def sumBudgets(): Option[Int] = teams.map(_.budget).sum.run
-  def averageEmployees(): Option[Int] = teams.map(_.employees).avg.run
-
-  def listMaxDriverWeightPerTeam(): List[(Int, Option[Int])] = {
-    drivers.groupBy(_.teamId).map {
-      case (teamId, drivers) => (teamId, drivers.map(_.weight).max)
-    }.list
-  }
+  def sumBudgets(): Option[Int] = ???
+  def averageEmployees(): Option[Int] = ???
+  def listMaxDriverWeightPerTeam(): List[(Int, Option[Int])] = ???
 
   // Bonus task:
-  def listNumberOfDriversPerTeam(): List[(String, Int)] = {
-    (for {
-      driver <- drivers
-      team <- driver.team
-    } yield (driver, team)).groupBy(_._2.id).map {
-      case (_, grouped) => (grouped.map(_._2.name).max.get, grouped.length)
-    }.list
-  }
+  def listNumberOfDriversPerTeam(): List[(String, Int)] = ???
 
 }
