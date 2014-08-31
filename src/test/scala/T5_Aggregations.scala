@@ -60,4 +60,8 @@ class T5_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     )
   }
 
+  test("BONUS TASK 2: Solve the first bonus task with plain SQL, to see what's most elegant.") {
+    //creating the test is left as an exercise to the reader
+  }
+
 }
