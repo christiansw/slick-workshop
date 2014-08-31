@@ -19,12 +19,12 @@ class Formula1Repository(implicit s: Session) {
 
   def findTeamWithName(name: String): Option[Team] = ???
   def listTeamsWithBudgetAbove(minimumBudget: Int): List[Team] = ???
-  def listTop3LightestDriversBornAfter(birthYear: Int) = ???
+  def listTop3LightestDriversBornAfter(birthYear: Int): List[String] = ???
 
   // T3_Joins:
 
   def listDriversWithTeam(): List[(Driver, Team)] = ???
-  def listEngineForDriversBornAfter(birthYear: Int) = ???
+  def listEngineForDriversBornAfter(birthYear: Int): List[(String, String)] = ???
 
   // T4_UpdateAndDelete:
 
