@@ -31,4 +31,19 @@ class T2_Filters extends BaseFormula1RepositoryTest with Matchers {
     results should contain theSameElementsAs List(redBull, ferrari)
   }
 
+  test("Should list top 3 lightest drivers born after specified year") {
+    val team: Team = sut.insertTeam(teamWithName("Team A"))
+
+    sut.insertDriver(Driver("Nico Rosberg", team.id, 1985, 71))
+    sut.insertDriver(Driver("Sebastian Vettel", team.id, 1987, 58))
+    sut.insertDriver(Driver("Fernando Alonso", team.id, 1981, 68))
+    sut.insertDriver(Driver("Jenson Button", team.id,   1980, 72))
+    sut.insertDriver(Driver("Daniel Ricciardo", team.id, 1989, 64))
+
+    val results = sut.listTop3LightestDriversBornAfter(1980);
+
+    results should contain theSameElementsInOrderAs List("Sebastian Vettel", "Daniel Ricciardo", "Fernando Alonso")
+
+  }
+
 }

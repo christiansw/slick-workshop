@@ -43,11 +43,23 @@ class Formula1Repository(implicit s: Session) {
       } yield team).list
     }
   */
+  def listTop3LightestDriversBornAfter(birthYear: Int): List[String] = {
+    drivers.filter(_.birthYear > birthYear).sortBy(_.weight).take(3).map(_.name).list
+  }
 
   // T3_Joins:
 
   def listDriversWithTeam(): List[(Driver, Team)] = {
     (drivers join teams on (_.teamId === _.id)).list
+  }
+
+  def listEngineForDriversBornAfter(birthYear: Int): List[(String, String)] = {
+    val query = for {
+      driver <- drivers if driver.birthYear > birthYear
+      team <- driver.team
+    } yield (driver.name, team.engineBrand)
+
+    query.list
   }
 
   // T4_UpdateAndDelete:
@@ -68,16 +80,6 @@ class Formula1Repository(implicit s: Session) {
   def listMaxDriverWeightPerTeam(): List[(Int, Option[Int])] = {
     drivers.groupBy(_.teamId).map {
       case (teamId, drivers) => (teamId, drivers.map(_.weight).max)
-    }.list
-  }
-
-  // Bonus task:
-  def listNumberOfDriversPerTeam(): List[(String, Int)] = {
-    (for {
-      driver <- drivers
-      team <- driver.team
-    } yield (driver, team)).groupBy(_._2.id).map {
-      case (_, grouped) => (grouped.map(_._2.name).max.get, grouped.length)
     }.list
   }
 

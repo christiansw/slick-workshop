@@ -43,24 +43,7 @@ class T5_Aggregations extends BaseFormula1RepositoryTest with Matchers {
     )
   }
 
-  test("BONUS TASK: Should get number of drivers per team") {
-    val redBull = sut.insertTeam(teamWithName("Red Bull"))
-    sut.insertDriver(driverWithName("Sebastian Vettel", redBull.id))
-    sut.insertDriver(driverWithName("Daniel Ricciardo", redBull.id))
-
-    val mercedes = sut.insertTeam(teamWithName("Mercedes"))
-    sut.insertDriver(driverWithName("Nico Rosberg", mercedes.id))
-
-    val results = sut.listNumberOfDriversPerTeam()
-    assert(results.size === 2)
-
-    results should contain theSameElementsAs List(
-      ("Red Bull", 2),
-      ("Mercedes", 1)
-    )
-  }
-
-  test("BONUS TASK 2: Solve the first bonus task with plain SQL, to see what's most elegant.") {
+  test("BONUS TASK: Solve one of the previous tasks with plain SQL using Slick.") {
     //creating the test is left as an exercise to the reader
   }
 
