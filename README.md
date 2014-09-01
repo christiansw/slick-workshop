@@ -1,4 +1,4 @@
-### Slick hands-on
+### Slick workshop
 
 Setup that should be done before the workshop:
 
