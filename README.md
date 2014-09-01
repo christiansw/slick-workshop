@@ -1,5 +1,4 @@
-### Slick hands-on
-
+### Slick workshop
 Setup that should be done before the workshop:
 
 1. Install Scala-plugin for your IDE
