@@ -5,5 +5,5 @@ Setup that should be done before the workshop:
  * IntelliJ: Search for 'scala' in plugin manager
  * Eclipse: http://scala-ide.org/
 2. Fetch the project: `git clone https://github.com/christiansw/slick-workshop.git`
-3. Open the project in IntelliJ or Eclipse.
+3. Open the project in IntelliJ or Eclipse (open build.sbt file)
 4. Run tests via your IDE.
