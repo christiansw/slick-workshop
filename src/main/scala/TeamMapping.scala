@@ -1,5 +1,4 @@
 import scala.slick.driver.H2Driver.simple._
-import scala.slick.lifted.ForeignKeyQuery
 
 case class Team(id: Int, name: String, engineBrand: String, budget: Int, employees: Int)
 
