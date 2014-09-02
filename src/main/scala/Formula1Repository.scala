@@ -64,7 +64,7 @@ class Formula1Repository(implicit s: Session) {
 
   // T4_UpdateAndDelete:
 
-  def update(team: Team): Int = teams.filter(_.id === team.id).update(team)
+  def update(team: Team): Int = teams.update(team)
   def deleteTeam(id: Int): Int = teams.filter(_.id === id).delete
   def findTeamById(id: Int): Option[Team] = teams.filter(_.id === id).firstOption
   def updateEmployees(id: Int, newEmployees: Int): Int =
